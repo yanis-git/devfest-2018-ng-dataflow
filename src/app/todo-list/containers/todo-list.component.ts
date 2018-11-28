@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { TodoListService } from '../services/todo.service';
 import { Todo } from '../models/Todo';
 
@@ -10,10 +10,9 @@ import { Todo } from '../models/Todo';
   providers: [TodoListService],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TodoListComponent implements OnInit {
+export class TodoListComponent {
 
   constructor(public todoService: TodoListService) { }
-  ngOnInit() {  }
 
   onAddTodo(todo: Todo) {
     this.todoService.add(todo);

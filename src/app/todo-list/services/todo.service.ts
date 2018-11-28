@@ -39,7 +39,8 @@ export class TodoListService {
                 if (currentIndex !== index) {
                     return current;
                 }
-                return {...current, complete: true};
+                  // {...current, complete: true};
+                return Object.assign({}, current, {complete: true});
             })
         );
     }
