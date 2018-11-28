@@ -1,0 +1,14 @@
+<section class="todoapp">
+  <app-todo-list-header [defaultTodo]="todoService.getDefault()" (add)="onAddTodo($event)"></app-todo-list-header>
+  <section class="main" *ngIf="todoService.hasTodos$ | async">
+    <ul class="todo-list">
+      <li *ngFor="let todo of todoService.todos$ | async" [class.completed]="todo.complete">
+        <app-todo-list-item
+          [todo]="todo"
+          (toggleComplete)="onToggleTodoComplete($event)"
+          (remove)="onRemoveTodo($event)"></app-todo-list-item>
+      </li>
+    </ul>
+  </section>
+  <app-todo-list-footer [countTodo]="todoService.todosCount$ | async"></app-todo-list-footer>
+</section>
