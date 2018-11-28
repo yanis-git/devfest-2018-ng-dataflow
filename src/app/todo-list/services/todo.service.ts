@@ -3,7 +3,6 @@ import { BehaviorSubject, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { Todo } from "../models/Todo";
 
-
 @Injectable()
 export class TodoListService {
     private _todos$: BehaviorSubject<Todo[]>;

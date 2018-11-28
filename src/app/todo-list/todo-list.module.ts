@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TodoListComponent } from './containers/todo-list.component';
-import { TodoListHeaderComponent } from './components/todo-list-header/todo-list-header.component';
-import { TodoListFooterComponent } from './components/todo-list-footer/todo-list-footer.component';
-import { TodoListItemComponent } from './components/todo-list-item/todo-list-item.component';
+import { TodoListHeaderComponent } from './components/header/todo-list-header.component';
+import { TodoListFooterComponent } from './components/footer/todo-list-footer.component';
+import { TodoListItemComponent } from './components/item/todo-list-item.component';
 
 
 @NgModule({
