@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { Todo } from '../../models/Todo';
+import {Todo, TodoState} from '../../models/Todo';
 
 @Component({
   selector: 'app-todo-list-item',
@@ -10,16 +10,16 @@ import { Todo } from '../../models/Todo';
 export class TodoListItemComponent {
 
   @Input() todo: Todo;
-  @Output() remove: EventEmitter<Todo> = new EventEmitter();
-  @Output() toggleComplete: EventEmitter<Todo> = new EventEmitter();
+  @Output() remove: EventEmitter<TodoState> = new EventEmitter();
+  @Output() toggleComplete: EventEmitter<TodoState> = new EventEmitter();
 
   constructor() {  }
 
-  toggleTodoComplete(todo: Todo) {
+  toggleTodoComplete(todo: TodoState) {
     this.toggleComplete.emit(todo);
   }
 
-  removeTodo(todo: Todo) {
+  removeTodo(todo: TodoState) {
     this.remove.emit(todo);
   }
 }

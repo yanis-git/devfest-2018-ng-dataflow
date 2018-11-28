@@ -1,5 +1,8 @@
 <header class="header">
   <h1>Todos</h1>
+  <select name="user" [(ngModel)]="currentId" (change)="onChange()">
+    <option *ngFor="let user of users" [value]="user.id">{{ user.name }}</option>
+  </select>
   <input 
     type="text"
     class="new-todo" 

@@ -1,8 +1,13 @@
 <section class="todoapp">
-  <app-todo-list-header [defaultTodo]="todoService.getDefault()" (add)="onAddTodo($event)"></app-todo-list-header>
-  <section class="main" *ngIf="todoService.hasTodos$ | async">
+  <app-todo-list-header
+          [users]="this.storeService.select('users') | async"
+          [defaultTodo]="todoService.getDefault()"
+          (add)="onAddTodo($event)"
+          (userChange)="onUserChange($event)"
+  ></app-todo-list-header>
+  <section class="main" *ngIf="todoService.hasTodos$(todosByUser$) | async">
     <ul class="todo-list">
-      <li *ngFor="let todo of todoService.todos$ | async" [class.completed]="todo.complete">
+      <li *ngFor="let todo of todosByUser$ | async" [class.completed]="todo.complete">
         <app-todo-list-item
           [todo]="todo"
           (toggleComplete)="onToggleTodoComplete($event)"
@@ -10,5 +15,5 @@
       </li>
     </ul>
   </section>
-  <app-todo-list-footer [countTodo]="todoService.todosCount$ | async"></app-todo-list-footer>
+  <app-todo-list-footer [countTodo]="todoService.todosCount$(todosByUser$) | async"></app-todo-list-footer>
 </section>

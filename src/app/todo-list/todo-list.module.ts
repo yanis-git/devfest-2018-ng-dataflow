@@ -8,7 +8,12 @@ import { TodoListItemComponent } from './components/item/todo-list-item.componen
 
 
 @NgModule({
-  declarations: [TodoListComponent, TodoListHeaderComponent, TodoListFooterComponent, TodoListItemComponent],
+  declarations: [
+    TodoListComponent, 
+    TodoListHeaderComponent,
+    TodoListFooterComponent,
+    TodoListItemComponent
+  ],
   imports: [
     CommonModule,
     FormsModule
