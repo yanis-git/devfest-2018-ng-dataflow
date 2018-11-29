@@ -18,7 +18,7 @@ export interface Todo {
 export const todosState: TodoState[] = [
   {
       id: 1245,
-      title: 'Build my Black Star',
+      title: 'Build my Death Star',
       complete: false,
       user: 1
   },
@@ -42,3 +42,12 @@ export const todosState: TodoState[] = [
     user: 2
   }
 ];
+
+const user: User = { id: 1,  name: 'Dark Vador' };
+
+const todo: TodoState = {
+  id: 1245,
+  title: 'Build my Death Star',
+  complete: false,
+  user: 1
+};

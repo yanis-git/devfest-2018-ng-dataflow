@@ -43,6 +43,7 @@ export class UserService {
   }
 
   setCurrent(id: number) {
+    this._currentUser = id;
     this._currentUser$.next(id);
   }
 }
