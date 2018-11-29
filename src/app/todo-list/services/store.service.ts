@@ -108,8 +108,10 @@ export class StoreService {
   private bindMiddleware() {
     merge(this.actions$, of({type: 'INIT'})).subscribe(action => {
       const newStore = this.reduce(this._store, action);
-      this._store = newStore;
-      this._store$.next(newStore);
+      if (this.hasChange(newStore)) {
+        this._store = newStore;
+        this._store$.next(newStore);
+      }
     });
   }
 }
