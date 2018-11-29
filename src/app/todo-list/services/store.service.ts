@@ -6,6 +6,7 @@ import {State} from '../store/store';
 import {distinctUntilChanged, map, pluck} from 'rxjs/operators';
 import {TodoState, Todo} from '../models/Todo';
 import {User} from '../models/User';
+import { currentId } from 'async_hooks';
 
 
 
@@ -77,8 +78,11 @@ export class StoreService {
   }
 
   selectFilterdTodo(): Observable<Todo[]> {
-    return this._store$.pipe(map(state => {
-      return state.todos.filter(todo => todo.user.id === state.currentUser);
-    }));
+    return this._store$.pipe(
+      pluck<State, {todos: Todo[], currentUser: number}>('currentUser', 'todos'),
+      distinctUntilChanged(),
+      map(state => {
+        return state.todos.filter(todo => todo.user.id === state.currentUser);
+      }));
   }
 }
