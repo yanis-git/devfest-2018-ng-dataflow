@@ -1,65 +1,58 @@
-import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
-import { map } from "rxjs/operators";
-import {todosState, TodoState} from '../models/Todo';
+import { Injectable } from '@angular/core';
+import {TodoState} from '../models/Todo';
+import {ReducerAbstract} from './reducer.abstract';
+import {Action} from './store.service';
+import {isNumber} from 'util';
 
 @Injectable()
-export class TodoListService {
-    private _todos$: BehaviorSubject<TodoState[]>;
-    private _todos: TodoState[];
+export class TodoListService extends ReducerAbstract {
 
     constructor() {
-        this._todos$ = new BehaviorSubject<TodoState[]>(todosState);
-        this._todos = todosState;
+        super();
+    }
+    reduce(state: TodoState[], action: Action): TodoState[] {
+        switch (action.type) {
+          case 'todo_add':
+              return this.add(state, (action.payload as TodoState));
+
+          case 'todo_remove':
+            return this.remove(state, (action.payload as TodoState));
+
+          case 'todo_complete':
+            return this.complete(state, (action.payload as TodoState));
+
+          default:
+              return state;
+        }
     }
 
-    add(todo: TodoState) {
-        this.notify(
-            [todo, ...this._todos]
-        );
+    add(state: TodoState[], todo: TodoState): TodoState[] {
+        if (!isNumber(todo.user)) {
+            todo.user = (todo.user as unknown as {id: number}).id;
+        }
+        return [todo, ...state];
     }
 
-    remove(todo: TodoState) {
-        this.notify([
-            ...this._todos.filter(current => todo.id !== current.id)
-        ]);
+    remove(state: TodoState[], todo: TodoState): TodoState[] {
+        return state.filter(current => todo.id !== current.id);
+    }
+
+    complete(state: TodoState[], todo: TodoState): TodoState[] {
+        const index = state.findIndex(current => todo.id === current.id);
+        return state.map((current, currentIndex) => {
+            if (currentIndex !== index) {
+                return current;
+            }
+            return {...current, complete: !todo.complete};
+        });
     }
 
     getDefault(): TodoState {
         return {
-            id: Math.random(),
-            title: '',
-            complete: false,
-            user: 1
+          id: Math.random(),
+          title: '',
+          complete: false,
+          user: 1
         };
-    }
-
-    complete(todo: TodoState) {
-        const index = this._todos.findIndex(current => todo.id === current.id);
-        this.notify(
-            this._todos.map((current, currentIndex) => {
-                if (currentIndex !== index) {
-                    return current;
-                }
-                return {...current, complete: true};
-            })
-        );
-    }
-
-    get todos$(): Observable<TodoState[]> {
-        return this._todos$.asObservable();
-    }
-
-    todosCount$(todos$: Observable<TodoState[]>): Observable<number> {
-        return todos$.pipe(map(todos => todos.length));
-    }
-
-    hasTodos$(todos$: Observable<TodoState[]>): Observable<boolean> {
-        return this.todosCount$(todos$).pipe(map(count => count > 0));
-    }
-
-    private notify(todos: TodoState[]) {
-        this._todos = todos;
-        this._todos$.next(todos);
     }
 }
