@@ -43,11 +43,9 @@ export const todosState: TodoState[] = [
   }
 ];
 
-const user: User = { id: 1,  name: 'Dark Vador' };
-
-const todo: TodoState = {
-  id: 1245,
-  title: 'Build my Death Star',
-  complete: false,
-  user: 1
+const entities = {};
+todosState.map(e => e.id).forEach((id, index) => entities[id] = todosState[index]);
+export const todoEntities = {
+  ids: todosState.map(e => e.id),
+  entities,
 };

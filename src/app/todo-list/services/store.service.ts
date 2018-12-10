@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {TodoListService} from './todo-list.service';
 import {UserService} from './user.service';
 import {Observable, combineLatest, Subject, BehaviorSubject, merge, of} from 'rxjs';
-import {FlatStore, State} from '../store/store';
+import {FlatStore, State} from '../store/models/store';
 import {distinctUntilChanged, map, pluck} from 'rxjs/operators';
 import {TodoState, Todo, todosState} from '../models/Todo';
 import {User, usersState} from '../models/User';

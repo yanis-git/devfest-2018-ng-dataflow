@@ -5,8 +5,13 @@ import {UserService} from '../services/user.service';
 import {StoreService} from '../services/store.service';
 import {Observable} from 'rxjs';
 import {User} from '../models/User';
-import {map} from 'rxjs/operators';
+import {distinctUntilChanged, map} from 'rxjs/operators';
 import {CurrentUserService} from '../services/current-user.service';
+import {select, Store} from '@ngrx/store';
+import {State, TodoListState} from '../store/models/store';
+import {filteredTodos, selectAll, users} from '../store/reducers';
+import {AddTodoAction, CompleteTodoAction, RemoveTodoAction} from '../store/actions/todo.action';
+import {CurrentUserSwitchAction} from '../store/actions/current-user.action';
 
 
 @Component({
@@ -24,40 +29,31 @@ export class TodoListComponent implements OnInit {
 
   constructor(
     public todoService: TodoListService,
-    public storeService: StoreService
+    public storeService: StoreService,
+    public store: Store<TodoListState>
   ) { }
 
   ngOnInit() {
-    this.todosByUser$ = this.storeService.filteredTodo$;
-    this.users$ = this.storeService.select<User[]>(['users']);
+    this.todosByUser$ = this.store.pipe(select<TodoListState, Todo[]>(filteredTodos));
+    this.users$ = this.store.pipe(select<TodoListState, User[]>(users));
     this.todosCount$ = this.todosByUser$.pipe(map(todos => todos.length));
+    // this.store.pipe(select<TodoListState, State>(selectAll)).subscribe(console.log);
+    this.users$.subscribe(console.log);
   }
 
   onAddTodo(todo: Todo) {
-    this.storeService.dispatch({
-      type: 'todo_add',
-      payload: this.storeService.fromNestedToFlat(todo)
-    });
+    this.store.dispatch(new AddTodoAction(todo));
   }
 
   onRemoveTodo(todo: Todo) {
-    this.storeService.dispatch({
-      type: 'todo_remove',
-      payload: todo
-    });
+    this.store.dispatch(new RemoveTodoAction(todo));
   }
 
   onToggleTodoComplete(todo: Todo) {
-    this.storeService.dispatch({
-      type: 'todo_complete',
-      payload: todo
-    });
+    this.store.dispatch(new CompleteTodoAction(todo));
   }
 
   onUserChange(user: User) {
-    this.storeService.dispatch({
-      type: 'set_current_user',
-      payload: user.id
-    });
+    this.store.dispatch(new CurrentUserSwitchAction(user.id));
   }
 }
